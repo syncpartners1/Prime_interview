@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /sessions/{sessionId} {
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.phase == 'in_progress';
+
+      allow read: if request.auth != null
+                  && (resource.data.uid == request.auth.uid
+                      || request.auth.token.firebase.sign_in_provider == 'password');
+
+      allow update: if request.auth != null
+                    && (resource.data.uid == request.auth.uid
+                        || request.auth.token.firebase.sign_in_provider == 'password');
+
+      allow delete: if false;
+    }
+  }
+}
