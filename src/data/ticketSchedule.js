@@ -215,11 +215,13 @@ const fillerTemplates = [
   },
   {
     category: 'REQ',
-    title: 'הרשאת יועץ חיצוני למערכת פרויקטים',
-    description: 'בקשת הרשאה למערכת ניהול הפרויקטים עבור יועץ חיצוני חדש.',
+    title: 'צוות הפיתוח תקוע בלי אפיון',
+    description:
+      'ראש צוות הפיתוח מדווח שכל הצוות תקוע ולא יכול להמשיך לפתח את מסך ההנחות עד שיקבל ממך אפיון חסר. אין כאן תקלה טכנית - אך כל הצוות ממתין לך.',
     correctClassification: CLASSIFICATION.SERVICE_REQUEST,
-    correctUrgency: URGENCY.P4,
-    expectedHandling: 'אימות אישור מנהל הפרויקט, הקצאת הרשאה מוגבלת לפי נוהל SLA רגיל.',
+    correctUrgency: URGENCY.P2,
+    expectedHandling:
+      'זיהוי שמדובר בצוואר בקבוק המשתק צוות שלם, לא רק בקשה שגרתית - מענה מהיר משחרר את הצוות להמשך העבודה גם ללא תיוג P1 פורמלי.',
   },
   {
     category: 'INC',
