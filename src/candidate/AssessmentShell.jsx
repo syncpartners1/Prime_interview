@@ -64,7 +64,7 @@ export default function AssessmentShell() {
   const systemLoad = useSystemLoad(state.tickets, state.emails)
 
   const openTicketCount = state.deliveredTicketIds.filter((id) => state.tickets[id]?.status !== 'closed').length
-  const openEmailCount = state.deliveredEmailIds.filter((id) => !state.emails[id]?.reply?.trim()).length
+  const openEmailCount = state.deliveredEmailIds.filter((id) => !state.emails[id]?.sent).length
 
   return (
     <div className="flex h-screen flex-col bg-slate-100">

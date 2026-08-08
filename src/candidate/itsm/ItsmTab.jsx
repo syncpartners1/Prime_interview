@@ -33,9 +33,9 @@ export default function ItsmTab({ tickets, deliveredTicketIds, elapsedSec, sessi
     return undefined
   }, [deliveredTicketIds])
 
-  const handleFieldChange = (ticketId, field, value) => {
-    dispatch({ type: 'UPDATE_TICKET_FIELD', payload: { ticketId, field, value, atSec: elapsedSec } })
-    updateTicketField(sessionId, ticketId, field, value, elapsedSec).catch(() => {})
+  const handleFieldChange = (ticketId, field, value, confirm = false) => {
+    dispatch({ type: 'UPDATE_TICKET_FIELD', payload: { ticketId, field, value, atSec: elapsedSec, confirm } })
+    updateTicketField(sessionId, ticketId, field, value, elapsedSec, confirm).catch(() => {})
   }
 
   if (deliveredTickets.length === 0) {
@@ -59,7 +59,11 @@ export default function ItsmTab({ tickets, deliveredTicketIds, elapsedSec, sessi
         ))}
       </div>
       <div className="flex-1 overflow-y-auto">
-        <TicketDetail ticket={selectedTicket} data={selectedData} onFieldChange={(field, value) => handleFieldChange(selectedTicket.id, field, value)} />
+        <TicketDetail
+          ticket={selectedTicket}
+          data={selectedData}
+          onFieldChange={(field, value, confirm) => handleFieldChange(selectedTicket.id, field, value, confirm)}
+        />
       </div>
       <ArrivalToast message={toast} />
     </div>

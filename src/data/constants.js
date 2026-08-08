@@ -60,8 +60,8 @@ export const RESPONSE_STRATEGIES = [
 ]
 
 export const SYSTEM_LOAD_LEVELS = [
-  { max: 1, label: 'רגוע', color: 'green' },
-  { max: 3, label: 'עמוס', color: 'yellow' },
-  { max: 5, label: 'עומס גבוה', color: 'orange' },
+  { max: 3, label: 'רגוע', color: 'green' },
+  { max: 8, label: 'עמוס', color: 'yellow' },
+  { max: 15, label: 'עומס גבוה', color: 'orange' },
   { max: Infinity, label: 'קריטי', color: 'red' },
 ]

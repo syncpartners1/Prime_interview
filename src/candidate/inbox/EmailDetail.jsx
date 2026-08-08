@@ -1,27 +1,33 @@
 import { useState, useEffect } from 'react'
-import { DISC_STYLE_LABELS, RESPONSE_STRATEGIES } from '../../data/constants'
+import { RESPONSE_STRATEGIES } from '../../data/constants'
 import { useDebouncedFieldSync } from '../../hooks/useDebouncedFieldSync'
 
 export default function EmailDetail({ email, data, onFieldChange }) {
   const [reply, setReply] = useState(data?.reply || '')
+  const [justSent, setJustSent] = useState(false)
 
   useEffect(() => {
     setReply(data?.reply || '')
+    setJustSent(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email.id])
 
   useDebouncedFieldSync(reply, (value) => onFieldChange('reply', value))
 
+  const isSent = Boolean(data?.sent)
+
+  const handleSendClick = () => {
+    onFieldChange('reply', reply)
+    onFieldChange('sent', true)
+    setJustSent(true)
+    setTimeout(() => setJustSent(false), 2000)
+  }
+
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5">
-      <div className="mb-3 flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-800">{email.sender}</h3>
-          <div className="text-xs text-slate-400">{email.role}</div>
-        </div>
-        <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-          {DISC_STYLE_LABELS[email.discStyle]}
-        </span>
+      <div className="mb-3">
+        <h3 className="text-lg font-semibold text-slate-800">{email.sender}</h3>
+        <div className="text-xs text-slate-400">{email.role}</div>
       </div>
       <div className="mb-1 text-sm font-medium text-slate-700">{email.subject}</div>
       <p className="mb-5 rounded-lg bg-slate-50 p-3 text-sm leading-relaxed text-slate-700">{email.body}</p>
@@ -42,7 +48,7 @@ export default function EmailDetail({ email, data, onFieldChange }) {
         </select>
       </div>
 
-      <div>
+      <div className="mb-4">
         <label className="mb-1 block text-xs font-medium text-slate-500">מענה חופשי</label>
         <textarea
           value={reply}
@@ -51,6 +57,18 @@ export default function EmailDetail({ email, data, onFieldChange }) {
           className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
           placeholder="כתוב את תשובתך, מותאמת לסגנון התקשורת של השולח..."
         />
+      </div>
+
+      <div className="flex items-center gap-3">
+        <button
+          onClick={handleSendClick}
+          disabled={!reply.trim()}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-default disabled:bg-slate-200 disabled:text-slate-400"
+        >
+          שלח
+        </button>
+        {justSent && <span className="text-xs font-medium text-green-600">נשלח ✓</span>}
+        {!justSent && isSent && <span className="text-xs font-medium text-slate-400">נשלח בעבר — עריכה תדרוש שליחה מחדש</span>}
       </div>
     </div>
   )

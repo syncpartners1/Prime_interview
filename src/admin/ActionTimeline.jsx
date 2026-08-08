@@ -3,8 +3,10 @@ import { formatMMSS } from '../utils/time'
 const TYPE_LABELS = {
   ticket_arrived: 'קריאה חדשה התקבלה',
   ticket_updated: 'עדכון קריאה',
+  ticket_note_confirmed: 'עודכנה הערת עבודה',
   email_arrived: 'מייל חדש התקבל',
   email_reply_strategy: 'נבחרה אסטרטגיית מענה',
+  email_sent: 'נשלח מענה למייל',
   session_completed: 'המבחן הוגש',
 }
 

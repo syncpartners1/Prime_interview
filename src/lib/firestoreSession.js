@@ -21,13 +21,16 @@ export async function markEmailDelivered(sessionId, email, atSec) {
   })
 }
 
-export async function updateTicketField(sessionId, ticketId, field, value, atSec) {
+export async function updateTicketField(sessionId, ticketId, field, value, atSec, confirm = false) {
   const patch = {
     [`tickets.${ticketId}.${field}`]: value,
     [`tickets.${ticketId}.updatedAtSec`]: atSec,
   }
-  if (field === 'classification' || field === 'urgency' || field === 'status') {
-    patch.actionLog = arrayUnion({ tSec: atSec, type: 'ticket_updated', refId: ticketId, detail: `${field}=${value}` })
+  const isNoteConfirm = field === 'notes' && confirm
+  if (field === 'classification' || field === 'urgency' || field === 'status' || isNoteConfirm) {
+    const type = isNoteConfirm ? 'ticket_note_confirmed' : 'ticket_updated'
+    const detail = isNoteConfirm ? '' : `${field}=${value}`
+    patch.actionLog = arrayUnion({ tSec: atSec, type, refId: ticketId, detail })
   }
   await updateDoc(sessionRef(sessionId), patch)
 }
@@ -37,8 +40,10 @@ export async function updateEmailField(sessionId, emailId, field, value, atSec) 
     [`emails.${emailId}.${field}`]: value,
     [`emails.${emailId}.updatedAtSec`]: atSec,
   }
-  if (field === 'strategy') {
-    patch.actionLog = arrayUnion({ tSec: atSec, type: 'email_reply_strategy', refId: emailId, detail: value })
+  if (field === 'strategy' || field === 'sent') {
+    const type = field === 'sent' ? 'email_sent' : 'email_reply_strategy'
+    const detail = field === 'sent' ? '' : value
+    patch.actionLog = arrayUnion({ tSec: atSec, type, refId: emailId, detail })
   }
   await updateDoc(sessionRef(sessionId), patch)
 }

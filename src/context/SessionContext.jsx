@@ -60,9 +60,12 @@ function sessionReducer(state, action) {
     }
 
     case 'UPDATE_TICKET_FIELD': {
-      const { ticketId, field, value, atSec } = action.payload
+      const { ticketId, field, value, atSec, confirm } = action.payload
       const existing = state.tickets[ticketId] || {}
-      const shouldLog = field === 'classification' || field === 'urgency' || field === 'status'
+      const isNoteConfirm = field === 'notes' && confirm
+      const shouldLog = field === 'classification' || field === 'urgency' || field === 'status' || isNoteConfirm
+      const logType = isNoteConfirm ? 'ticket_note_confirmed' : 'ticket_updated'
+      const detail = isNoteConfirm ? '' : `${field}=${value}`
       return {
         ...state,
         tickets: {
@@ -70,7 +73,7 @@ function sessionReducer(state, action) {
           [ticketId]: { ...existing, [field]: value, updatedAtSec: atSec },
         },
         actionLog: shouldLog
-          ? appendLog(state.actionLog, { tSec: atSec, type: 'ticket_updated', refId: ticketId, detail: `${field}=${value}` })
+          ? appendLog(state.actionLog, { tSec: atSec, type: logType, refId: ticketId, detail })
           : state.actionLog,
       }
     }
@@ -78,7 +81,9 @@ function sessionReducer(state, action) {
     case 'UPDATE_EMAIL_FIELD': {
       const { emailId, field, value, atSec } = action.payload
       const existing = state.emails[emailId] || {}
-      const shouldLog = field === 'strategy'
+      const shouldLog = field === 'strategy' || field === 'sent'
+      const logType = field === 'sent' ? 'email_sent' : 'email_reply_strategy'
+      const detail = field === 'sent' ? '' : value
       return {
         ...state,
         emails: {
@@ -86,7 +91,7 @@ function sessionReducer(state, action) {
           [emailId]: { ...existing, [field]: value, updatedAtSec: atSec },
         },
         actionLog: shouldLog
-          ? appendLog(state.actionLog, { tSec: atSec, type: 'email_reply_strategy', refId: emailId, detail: value })
+          ? appendLog(state.actionLog, { tSec: atSec, type: logType, refId: emailId, detail })
           : state.actionLog,
       }
     }
