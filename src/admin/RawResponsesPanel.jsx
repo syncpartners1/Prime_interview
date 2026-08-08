@@ -1,6 +1,6 @@
 import { ticketSchedule } from '../data/ticketSchedule'
 import { emailSchedule } from '../data/emailSchedule'
-import { CLASSIFICATION_LABELS, URGENCY_LABELS } from '../data/constants'
+import { CLASSIFICATION_LABELS, TICKET_STATUS_LABELS, URGENCY_LABELS } from '../data/constants'
 
 export default function RawResponsesPanel({ tickets = {}, emails = {}, briefing = {} }) {
   return (
@@ -19,6 +19,7 @@ export default function RawResponsesPanel({ tickets = {}, emails = {}, briefing 
                 <div className="mb-1 font-semibold text-slate-500">תשובת המועמד</div>
                 <div>סיווג: {CLASSIFICATION_LABELS[answer.classification] || '—'}</div>
                 <div>דחיפות: {URGENCY_LABELS[answer.urgency] || '—'}</div>
+                <div>החלטת טיפול: {TICKET_STATUS_LABELS[answer.status] || 'טרם טופל'}</div>
                 <div className="mt-1 whitespace-pre-wrap text-slate-600">{answer.notes || '—'}</div>
               </div>
               <div>

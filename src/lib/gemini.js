@@ -1,8 +1,10 @@
 import { ticketSchedule } from '../data/ticketSchedule'
 import { emailSchedule } from '../data/emailSchedule'
 
+// Use the "-latest" alias (rather than pinning a dated model like gemini-1.5-flash,
+// which Google has since sunset) so this endpoint keeps working as models retire.
 const GEMINI_ENDPOINT =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent'
 
 const REQUIRED_SCORE_KEYS = [
   'prioritization_score',
@@ -16,8 +18,8 @@ const REQUIRED_TEXT_KEYS = ['disc_analysis', 'key_strengths', 'areas_for_improve
 
 const SYSTEM_INSTRUCTION = `אתה בוחן מומחה המעריך מועמדים לתפקיד ניהול ותמיכה ביישומים עסקיים, על סמך תרגיל סימולציה בן 20 דקות.
 עליך לנקד את המועמד לפי מטריצת המשקלים הבאה:
-- 30% תיעדוף וניהול עומס: טיפול נכון בדחיפות (P1 לפני P4) וסיווג נכון בין Incident, Change Request ו-Service Request.
-- 30% התאמת תקשורת למודל DISC: התאמת הטון, האורך והסגנון של התשובות החופשיות לכל אחד מארבעת סוגי השולחים (D, I, S, C).
+- 30% תיעדוף וניהול עומס: טיפול נכון בדחיפות (P1 לפני P4), סיווג נכון בין Incident, Change Request ו-Service Request, והאם ההחלטה על סטטוס הקריאה (טיפול ישיר / העברה למנהלת התמיכה / העברה למפתח / העברה למחלקה אחרת / סגירה) הייתה מתאימה לתוכן הקריאה - כולל ציון קריאות ספציפיות שנסגרו בטעות או נותבו בצורה לא נכונה.
+- 30% התאמת תקשורת למודל DISC: התאמת הטון, האורך והסגנון של התשובות החופשיות לכל אחד מארבעת סוגי השולחים (D, I, S, C). זהה במפורש כל מייל שבו תגובת המועמד לא הייתה מותאמת לסגנון התקשורת של השולח, וציין זאת בפירוט.
 - 20% זיהוי תבניות וראייה רוחבית: האם המועמד קישר בין תקלות בודדות לבעיה שורשית משותפת, במיוחד בתדרוך למנמ"ר.
 - 20% איכות תדרוך המנמ"ר: תכליתיות, זיהוי סיכונים עסקיים והמלצות מעשיות.
 
@@ -28,9 +30,11 @@ const SYSTEM_INSTRUCTION = `אתה בוחן מומחה המעריך מועמדי
   "pattern_recognition_score": number (0-100),
   "cio_briefing_score": number (0-100),
   "overall_score": number (0-100),
-  "disc_analysis": string (בעברית),
+  "disc_analysis": string (בעברית - כלול בו התייחסות מפורשת לכל מקרה של מענה שלא הותאם לסגנון התקשורת של השולח),
   "key_strengths": string[] (בעברית),
-  "areas_for_improvement": string[] (בעברית)
+  "areas_for_improvement": string[] (בעברית),
+  "ticket_handling_issues": string[] (בעברית - קריאות ספציפיות (לפי מזהה) שסווגו/תועדפו/נותבו לא נכון, או שנסגרו בלי טיפול מתאים; מערך ריק אם אין),
+  "disc_mismatches": string[] (בעברית - מיילים ספציפיים (לפי שולח) שבהם המענה לא הותאם לסגנון התקשורת שלהם; מערך ריק אם אין)
 }`
 
 function buildScoringPayload(sessionData) {

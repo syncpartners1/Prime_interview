@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { SessionProvider } from './context/SessionContext'
+import LandingPage from './LandingPage'
 import CandidateApp from './candidate/CandidateApp'
 
 const AdminApp = lazy(() => import('./admin/AdminApp'))
@@ -13,8 +14,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route
-          path="/"
+          path="/candidate"
           element={
             <SessionProvider>
               <CandidateApp />

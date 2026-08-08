@@ -14,7 +14,7 @@ export default function TicketDetail({ ticket, data, onFieldChange }) {
 
   useDebouncedFieldSync(notes, (value) => onFieldChange('notes', value))
 
-  const isClosed = (data?.status || TICKET_STATUS.IN_PROGRESS) === TICKET_STATUS.CLOSED
+  const isClosed = data?.status === TICKET_STATUS.CLOSED
 
   const handleUpdateClick = () => {
     onFieldChange('notes', notes, true)
@@ -66,12 +66,13 @@ export default function TicketDetail({ ticket, data, onFieldChange }) {
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-slate-500">סטטוס</label>
+          <label className="mb-1 block text-xs font-medium text-slate-500">החלטת טיפול</label>
           <select
-            value={data?.status || 'in_progress'}
+            value={data?.status || ''}
             onChange={(e) => onFieldChange('status', e.target.value)}
             className="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm"
           >
+            <option value="">בחר פעולה</option>
             {Object.entries(TICKET_STATUS_LABELS).map(([value, label]) => (
               <option key={value} value={value}>
                 {label}
@@ -106,7 +107,7 @@ export default function TicketDetail({ ticket, data, onFieldChange }) {
           disabled={isClosed}
           className="mr-auto rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:cursor-default disabled:bg-slate-200 disabled:text-slate-400"
         >
-          {isClosed ? 'הקריאה נסגרה ✓' : 'סיים טיפול בקריאה'}
+          {isClosed ? 'הבקשה נסגרה ✓' : 'סגור את הבקשה'}
         </button>
       </div>
     </div>

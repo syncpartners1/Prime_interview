@@ -16,7 +16,7 @@ export async function markTicketDelivered(sessionId, ticket, atSec) {
 export async function markEmailDelivered(sessionId, email, atSec) {
   await updateDoc(sessionRef(sessionId), {
     deliveredEmailIds: arrayUnion(email.id),
-    [`emails.${email.id}`]: { strategy: '', reply: '', updatedAtSec: atSec },
+    [`emails.${email.id}`]: { reply: '', sent: false, updatedAtSec: atSec },
     actionLog: arrayUnion({ tSec: atSec, type: 'email_arrived', refId: email.id, detail: '' }),
   })
 }
@@ -40,10 +40,8 @@ export async function updateEmailField(sessionId, emailId, field, value, atSec) 
     [`emails.${emailId}.${field}`]: value,
     [`emails.${emailId}.updatedAtSec`]: atSec,
   }
-  if (field === 'strategy' || field === 'sent') {
-    const type = field === 'sent' ? 'email_sent' : 'email_reply_strategy'
-    const detail = field === 'sent' ? '' : value
-    patch.actionLog = arrayUnion({ tSec: atSec, type, refId: emailId, detail })
+  if (field === 'sent') {
+    patch.actionLog = arrayUnion({ tSec: atSec, type: 'email_sent', refId: emailId, detail: '' })
   }
   await updateDoc(sessionRef(sessionId), patch)
 }

@@ -10,6 +10,7 @@ import TabNav from './TabNav'
 import ItsmTab from './itsm/ItsmTab'
 import InboxTab from './inbox/InboxTab'
 import BriefingTab from './briefing/BriefingTab'
+import BriefingAlertBanner from './briefing/BriefingAlertBanner'
 
 export default function AssessmentShell() {
   const state = useSessionState()
@@ -61,10 +62,14 @@ export default function AssessmentShell() {
     active: state.phase === 'in_progress',
   })
 
-  const systemLoad = useSystemLoad(state.tickets, state.emails)
+  const systemLoad = useSystemLoad(state.tickets)
 
   const openTicketCount = state.deliveredTicketIds.filter((id) => state.tickets[id]?.status !== 'closed').length
   const openEmailCount = state.deliveredEmailIds.filter((id) => !state.emails[id]?.sent).length
+
+  const briefingIsEmpty =
+    !state.briefing.executiveSummary?.trim() && !state.briefing.risks?.trim() && !state.briefing.actionPlan?.trim()
+  const showBriefingAlert = state.phase === 'in_progress' && remainingSec > 0 && remainingSec <= 300 && briefingIsEmpty
 
   return (
     <div className="flex h-screen flex-col bg-slate-100">
@@ -81,6 +86,7 @@ export default function AssessmentShell() {
         emailBadge={openEmailCount}
         onSubmit={() => setConfirmingSubmit(true)}
       />
+      {showBriefingAlert && <BriefingAlertBanner onGoToBriefing={() => setActiveTab('briefing')} />}
       <main className="flex-1 overflow-y-auto p-4">
         {activeTab === 'itsm' && (
           <ItsmTab tickets={state.tickets} deliveredTicketIds={state.deliveredTicketIds} elapsedSec={elapsedSec} sessionId={state.sessionId} />

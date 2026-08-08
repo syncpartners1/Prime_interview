@@ -55,6 +55,7 @@ export default function ItsmTab({ tickets, deliveredTicketIds, elapsedSec, sessi
             data={tickets[ticket.id]}
             selected={ticket.id === selectedTicket.id}
             onClick={() => setSelectedId(ticket.id)}
+            onQuickSubmit={() => handleFieldChange(ticket.id, 'status', 'closed')}
           />
         ))}
       </div>

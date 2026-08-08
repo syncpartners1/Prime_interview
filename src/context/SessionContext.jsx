@@ -39,7 +39,7 @@ function sessionReducer(state, action) {
         deliveredTicketIds: [...state.deliveredTicketIds, ticketId],
         tickets: {
           ...state.tickets,
-          [ticketId]: { classification: '', urgency: '', status: 'in_progress', notes: '', updatedAtSec: atSec },
+          [ticketId]: { classification: '', urgency: '', status: '', notes: '', updatedAtSec: atSec },
         },
         actionLog: appendLog(state.actionLog, { tSec: atSec, type: 'ticket_arrived', refId: ticketId, detail: '' }),
       }
@@ -53,7 +53,7 @@ function sessionReducer(state, action) {
         deliveredEmailIds: [...state.deliveredEmailIds, emailId],
         emails: {
           ...state.emails,
-          [emailId]: { strategy: '', reply: '', updatedAtSec: atSec },
+          [emailId]: { reply: '', sent: false, updatedAtSec: atSec },
         },
         actionLog: appendLog(state.actionLog, { tSec: atSec, type: 'email_arrived', refId: emailId, detail: '' }),
       }
@@ -81,9 +81,9 @@ function sessionReducer(state, action) {
     case 'UPDATE_EMAIL_FIELD': {
       const { emailId, field, value, atSec } = action.payload
       const existing = state.emails[emailId] || {}
-      const shouldLog = field === 'strategy' || field === 'sent'
-      const logType = field === 'sent' ? 'email_sent' : 'email_reply_strategy'
-      const detail = field === 'sent' ? '' : value
+      const shouldLog = field === 'sent'
+      const logType = 'email_sent'
+      const detail = ''
       return {
         ...state,
         emails: {

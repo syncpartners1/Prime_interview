@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { RESPONSE_STRATEGIES } from '../../data/constants'
 import { useDebouncedFieldSync } from '../../hooks/useDebouncedFieldSync'
 
 export default function EmailDetail({ email, data, onFieldChange }) {
@@ -16,7 +15,7 @@ export default function EmailDetail({ email, data, onFieldChange }) {
 
   const isSent = Boolean(data?.sent)
 
-  const handleSendClick = () => {
+  const handleReplyClick = () => {
     onFieldChange('reply', reply)
     onFieldChange('sent', true)
     setJustSent(true)
@@ -33,22 +32,6 @@ export default function EmailDetail({ email, data, onFieldChange }) {
       <p className="mb-5 rounded-lg bg-slate-50 p-3 text-sm leading-relaxed text-slate-700">{email.body}</p>
 
       <div className="mb-4">
-        <label className="mb-1 block text-xs font-medium text-slate-500">אסטרטגיית תגובה</label>
-        <select
-          value={data?.strategy || ''}
-          onChange={(e) => onFieldChange('strategy', e.target.value)}
-          className="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm"
-        >
-          <option value="">בחר אסטרטגיה</option>
-          {RESPONSE_STRATEGIES.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mb-4">
         <label className="mb-1 block text-xs font-medium text-slate-500">מענה חופשי</label>
         <textarea
           value={reply}
@@ -61,14 +44,14 @@ export default function EmailDetail({ email, data, onFieldChange }) {
 
       <div className="flex items-center gap-3">
         <button
-          onClick={handleSendClick}
+          onClick={handleReplyClick}
           disabled={!reply.trim()}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-default disabled:bg-slate-200 disabled:text-slate-400"
         >
-          שלח
+          ענה
         </button>
-        {justSent && <span className="text-xs font-medium text-green-600">נשלח ✓</span>}
-        {!justSent && isSent && <span className="text-xs font-medium text-slate-400">נשלח בעבר — עריכה תדרוש שליחה מחדש</span>}
+        {justSent && <span className="text-xs font-medium text-green-600">נענה ✓</span>}
+        {!justSent && isSent && <span className="text-xs font-medium text-slate-400">נענה בעבר — עריכה תדרוש מענה מחדש</span>}
       </div>
     </div>
   )

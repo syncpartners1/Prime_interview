@@ -27,15 +27,19 @@ export const CLASSIFICATION_LABELS = {
 }
 
 export const TICKET_STATUS = {
-  IN_PROGRESS: 'in_progress',
-  ESCALATED: 'escalated',
+  HANDLE_DIRECTLY: 'handle_directly',
+  TRANSFER_SUPPORT_MANAGER: 'transfer_support_manager',
+  TRANSFER_DEVELOPER: 'transfer_developer',
+  TRANSFER_OTHER_DEPT: 'transfer_other_dept',
   CLOSED: 'closed',
 }
 
 export const TICKET_STATUS_LABELS = {
-  in_progress: 'בטיפול',
-  escalated: 'הסלמה',
-  closed: 'נסגר',
+  handle_directly: 'טפל ישירות',
+  transfer_support_manager: 'העבר למנהלת התמיכה',
+  transfer_developer: 'העבר למפתח',
+  transfer_other_dept: 'העבר למחלקה אחרת',
+  closed: 'סגור את הבקשה',
 }
 
 export const DISC_STYLE = {
@@ -52,16 +56,9 @@ export const DISC_STYLE_LABELS = {
   C: 'C - מדויק',
 }
 
-export const RESPONSE_STRATEGIES = [
-  { value: 'direct_bottom_line', label: 'תשובה קצרה ותכליתית עם שורה תחתונה' },
-  { value: 'warm_enthusiastic', label: 'תשובה חמה ומתלהבת, מחברת לרעיון' },
-  { value: 'reassuring_detailed', label: 'תשובה מרגיעה עם פירוט שלבים' },
-  { value: 'factual_structured', label: 'תשובה עובדתית ומובנית עם נתונים' },
-]
-
 export const SYSTEM_LOAD_LEVELS = [
-  { max: 3, label: 'רגוע', color: 'green' },
-  { max: 8, label: 'עמוס', color: 'yellow' },
-  { max: 15, label: 'עומס גבוה', color: 'orange' },
+  { max: 5, label: 'רגוע', color: 'green' },
+  { max: 12, label: 'עמוס', color: 'yellow' },
+  { max: 20, label: 'עומס גבוה', color: 'orange' },
   { max: Infinity, label: 'קריטי', color: 'red' },
 ]

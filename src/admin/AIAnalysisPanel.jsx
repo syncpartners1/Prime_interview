@@ -29,6 +29,26 @@ export default function AIAnalysisPanel({ aiResult, aiScoringStatus, aiScoringEr
           ))}
         </ul>
       </div>
+      {aiResult.ticket_handling_issues?.length > 0 && (
+        <div>
+          <h4 className="mb-1 text-sm font-semibold text-slate-700">קריאות שטופלו/נותבו לא נכון</h4>
+          <ul className="list-inside list-disc space-y-1 text-sm text-slate-600">
+            {aiResult.ticket_handling_issues.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {aiResult.disc_mismatches?.length > 0 && (
+        <div>
+          <h4 className="mb-1 text-sm font-semibold text-slate-700">מענים שלא הותאמו לסגנון התקשורת</h4>
+          <ul className="list-inside list-disc space-y-1 text-sm text-slate-600">
+            {aiResult.disc_mismatches.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }

@@ -11,7 +11,7 @@ export default function EmailListItem({ email, data, selected, onClick }) {
       <div className="mb-1 text-sm font-medium text-slate-800">{email.sender}</div>
       <div className="mb-1 text-xs text-slate-400">{email.role}</div>
       <div className="truncate text-xs text-slate-500">{email.subject}</div>
-      {sent && <div className="mt-1 text-[10px] font-medium text-green-600">נשלח</div>}
+      {sent && <div className="mt-1 text-[10px] font-medium text-green-600">נענה</div>}
     </button>
   )
 }
