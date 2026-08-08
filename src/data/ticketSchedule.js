@@ -246,12 +246,14 @@ const fillerTemplates = [
     expectedHandling: 'בדיקת תצורת שרת הדפוס, שחזור הגדרות, עדכון משתמשים.',
   },
   {
-    category: 'REQ',
-    title: 'שדרוג תוכנת עיצוב לצוות השיווק',
-    description: 'בקשה לשדרוג תוכנת עיצוב עבור צוות השיווק לגרסה החדשה.',
-    correctClassification: CLASSIFICATION.SERVICE_REQUEST,
-    correctUrgency: URGENCY.P3,
-    expectedHandling: 'אימות תקציב ורישוי מול מנהל צוות השיווק, טיפול לפי SLA רגיל.',
+    category: 'INC',
+    title: 'קריסה נוספת ב-CRM בשמירת פנייה',
+    description:
+      'מערכת ה-CRM קורסת שוב, הפעם בעת שמירת פנייה חדשה של לקוח. נציגי השירות מדווחים שזו הפעם השנייה החודש שהמערכת קורסת בתרחיש שמירה דומה.',
+    correctClassification: CLASSIFICATION.INCIDENT,
+    correctUrgency: URGENCY.P2,
+    expectedHandling:
+      'זיהוי כי מדובר בהישנות של תקלת ה-CRM המוכרת (ר\' INC-103), העברה לחקירת שורש בצוות הפיתוח ולא רק טיפול נקודתי.',
   },
   {
     category: 'INC',
@@ -262,12 +264,14 @@ const fillerTemplates = [
     expectedHandling: 'הפעלת נוהל חירום, בדיקת סנכרון נתוני מלאי, עדכון הנהלת תפעול.',
   },
   {
-    category: 'CR',
-    title: 'עדכון לוגו במסמכי החברה',
-    description: 'בקשה להוספת לוגו מעודכן לתחתית מסמכי החברה הרשמיים.',
-    correctClassification: CLASSIFICATION.CHANGE_REQUEST,
-    correctUrgency: URGENCY.P4,
-    expectedHandling: 'תיעוד הדרישה והעברה לוועדת שינויים (CAB), ללא ביצוע מיידי.',
+    category: 'INC',
+    title: 'מסך אישור הזמנות ב-ERP קפא שוב',
+    description:
+      'מסך אישור ההזמנות ב-ERP אינו מגיב שוב, הפעם לעובדי מחלקת הרכש. זוהי הפעם השנייה השבוע שאותו מסך נתקע.',
+    correctClassification: CLASSIFICATION.INCIDENT,
+    correctUrgency: URGENCY.P2,
+    expectedHandling:
+      'זיהוי כי מדובר בהישנות של תקלת ה-ERP המוכרת (ר\' INC-101), הסלמה לחקירת שורש ולא רק מעקף זמני נוסף.',
   },
 ]
 
