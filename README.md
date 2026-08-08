@@ -2,6 +2,9 @@
 
 אפליקציית Web עצמאית לבחינת מועמדים לתפקיד ניהול ותמיכה ביישומים עסקיים: מבחן סימולציה בן 20 דקות הכולל ניהול קריאות ITSM, מענה למיילים לפי מודל DISC, ותדרוך למנהל מערכות מידע (CIO). בסיום המבחן נשלחים כל נתוני הפעילות ל-Gemini 1.5 Flash לניתוח וניקוד אוטומטי.
 
+**חי כרגע ב:** https://primelease-interview.web.app
+**כניסת מגייס (/admin):** `adibe@primelease.co.il`
+
 ## טכנולוגיות
 
 - React (Vite) + Tailwind CSS
@@ -9,20 +12,19 @@
 - Firebase Hosting
 - Gemini 1.5 Flash (Google AI Studio API) — נקרא ישירות מהדפדפן בסיום המבחן
 
-## הגדרת סביבה (חד-פעמי)
+## מצב הפרויקט (כבר הוגדר)
 
-1. **Firebase project**: פרויקט ה-GCP `prime-interview-504916` (https://console.cloud.google.com/welcome?project=prime-interview-504916). הוסף אליו את Firebase (Firebase console → Add Firebase to existing GCP project).
-2. **Firestore**: צור מסד נתונים Firestore במצב Native, ב-location **`me-west1` (Tel Aviv)** — בחירה זו היא חד-פעמית ולא ניתנת לשינוי לאחר יצירת המסד.
-3. **Auth**: הפעל שני ספקי כניסה ב-Firebase Authentication:
-   - **Anonymous** — עבור נבחנים.
-   - **Email/Password** — עבור המגייס. צור ידנית משתמש אחד (למשל `syncpartners1@gmail.com`) תחת Authentication → Users.
-4. **פריסת חוקי אבטחה**: `firebase deploy --only firestore:rules`.
-5. **מפתחות סביבה**: העתק את `.env.example` ל-`.env.local` ומלא:
-   - את פרטי קונפיגורציית ה-Web App מ-Firebase console (Project settings → General → Your apps).
-   - מפתח Gemini API מ-Google AI Studio (`VITE_GEMINI_API_KEY`).
-6. **הגבלת מפתח Gemini**: לאחר הפריסה, הגבל את מפתח ה-API (ב-Google Cloud Console → APIs & Services → Credentials) ל-HTTP referrer של דומיין ה-Hosting שלך, כדי לצמצם חשיפה — המפתח מגיע מהדפדפן (client-side) כפי שהוגדר במפרט המוצר.
+- **GCP project**: `prime-interview-504916` (https://console.cloud.google.com/welcome?project=prime-interview-504916), עם billing account מקושר (נדרש רק כדי להפעיל את Auth Admin API; השימוש בפועל נשאר בגבולות ה-free tier של Firebase Spark).
+- **Firestore**: מסד Native ב-location `me-west1` (Tel Aviv).
+- **Auth**: מופעלים Anonymous (לנבחנים) ו-Email/Password (למגייס, משתמש יחיד: `adibe@primelease.co.il`).
+- **Hosting site**: `primelease-interview` → https://primelease-interview.web.app (ה-siteId `prime-interview` היה תפוס גלובלית על ידי פרויקט Firebase אחר).
+- **חוקי אבטחה** (`firestore.rules`) כבר פרוסים.
+- **מפתח Gemini** מוגבל (HTTP referrer restriction) לדומיין ה-Hosting ול-localhost:5173 לפיתוח.
+- **`firebase-tools` CLI אינו מותקן** במחשב הפיתוח — כל הפעולות למעלה בוצעו ישירות דרך ה-REST APIs של Firebase/GCP (`gcloud auth print-access-token` + curl). לפריסה חוזרת של Hosting יש סקריפט חלופי: ראה `scripts/deploy-hosting.mjs`.
 
 ## פיתוח מקומי
+
+`.env.local` כבר מכיל את כל המפתחות הדרושים (לא ב-git).
 
 ```bash
 npm install
@@ -31,10 +33,13 @@ npm run dev
 
 ## פריסה
 
+אין `firebase-tools` מותקן, לכן הפריסה מתבצעת דרך סקריפט REST ייעודי (דורש `gcloud auth login` עם הרשאות לפרויקט):
+
 ```bash
-npm run build
-firebase deploy
+npm run deploy
 ```
+
+חוקי Firestore (`firestore.rules`) נפרסים דרך ה-Firebase Rules API — ראה את הפקודות בהיסטוריית הפיתוח, או התקן `firebase-tools` ותריץ `firebase deploy --only firestore:rules`.
 
 ## מבנה נתונים ב-Firestore
 
